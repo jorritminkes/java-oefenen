@@ -14,8 +14,8 @@ public class ReconScout extends Vessel {
     }
     
     @Override
-    public double maximumHyperspaceJump() {
-        double jumpRange = getFuelPercentage() * 100;
-        return jumpRange;        
+    public void maximumHyperspaceJump() {
+        double jumpRange = getFuelPercentage() * 100.0;
+        System.out.println("Jump range is " + jumpRange);    
     }
 }
