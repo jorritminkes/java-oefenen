@@ -38,9 +38,5 @@ public class UrgencyStrategy implements DeliveryStrategy {
                 drone.flyTo(randomNeighbor);
             }
         }
-
-
-
-
     }
 }
