@@ -16,6 +16,8 @@ public class UrgencyStrategy implements DeliveryStrategy {
     public void executeTurn(Drone drone) {
         Hub currentHub = drone.getCurrentHub();
 
+        drone.unloadPackage();
+
         if (!drone.isCarryingPackage()) {
             Optional<Package> highestPriorityPackage = currentHub.getQueue().stream()
                     .max(Comparator.comparingInt(Package::getPriorityLevel));

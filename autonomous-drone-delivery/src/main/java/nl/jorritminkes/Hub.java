@@ -25,6 +25,10 @@ public class Hub {
         Queue.remove(pkg);
     }
 
+    public void addPackage(Package pkg) {
+        Queue.add(pkg);
+    }
+
     public void acceptDelivery(Package pkg) {
         deliveredPackages.add(pkg);
     }
