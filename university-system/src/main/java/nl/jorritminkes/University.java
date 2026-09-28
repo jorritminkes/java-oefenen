@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import nl.jorritminkes.exception.DuplicatePersonException;
+import nl.jorritminkes.exception.InvalidCourseException;
+
 // ============================================================================
 // Part 4: UNIVERSITY & DATA MANAGEMENT
 // ============================================================================

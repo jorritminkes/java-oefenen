@@ -1,6 +1,6 @@
 package nl.jorritminkes;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Set;
 
 public class Cell {
@@ -20,20 +20,12 @@ public class Cell {
         return value;
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void solveCell() {
-
+    void setValue(int value) {
+        this.value = value;
     }
 
     public Set<Integer> getCandidates() {
-        Set<Integer> candidates = new HashSet<>();
+        Set<Integer> candidates = new TreeSet<>();
 
         for (int value = 1; value <= 9; value++) {
             candidates.add(value);

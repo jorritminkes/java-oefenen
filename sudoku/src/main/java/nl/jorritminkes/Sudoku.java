@@ -2,8 +2,10 @@ package nl.jorritminkes;
 
 public class Sudoku {
     private Box[] boxes;
+    private String initialPuzzle;
 
     public Sudoku(String puzzleValues) {
+        this.initialPuzzle = puzzleValues;
         boxes = new Box[9];
 
         for (int box = 0; box < 9; box++) {
@@ -28,10 +30,6 @@ public class Sudoku {
         }
     }
 
-    public Box[] getBoxes() {
-        return boxes;
-    }
-
     public Cell[] getRow(int row) {
         Cell[] cells = new Cell[9];
         for (int col = 0; col < 9; col++) {
@@ -52,6 +50,17 @@ public class Sudoku {
         return boxes[boxRow * 3 + boxCol];
     }
 
+    public Box getNextBox(Box box) {
+        int currentRow = box.getRow();
+        int currentCol = box.getCol();
+        int nextCol = (currentCol + 1) % 3;
+        int nextRow = currentRow;
+        if (nextCol == 0) {
+            nextRow = (nextRow + 1) % 3;
+        }
+        return getBox(nextRow, nextCol);
+    }
+
     public Cell getCell(int row, int col) {
         Box box = getBox(row / 3, col / 3);
 
@@ -60,11 +69,39 @@ public class Sudoku {
         return box.getCells()[cellIndex];
     }
 
-    public String solve() {
-        System.out.println("Starting puzzle solving now");
+    public String getString() {
+        String sodokuString = "";
+        for (int row = 0; row < 9; row++) {
+            for (Cell cell : getRow(row)) {
+                sodokuString += cell.getValue();
+            }
+        }
+        return sodokuString;
+    }
 
+    public void printSudokuGrid() {
+        String currentGrid = getString();
+        for (int row = 0; row < 9; row++) {
+            if (row > 0 && row % 3 == 0) {
+                System.out.println("------+-------+------");
+            }
+            for (int col = 0; col < 9; col++) {
+                if (col > 0 && col % 3 == 0) {
+                    System.out.print("| ");
+                }
+                int index = row * 9 + col;
+                char c = currentGrid.charAt(index);
+                System.out.print((c == '0' ? '.' : c) + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public boolean isSolved() {
+        return !getString().contains("0");
+    }
+
+    public void solve() {
         boxes[0].solve();
-
-        return "solved";
     }
 }

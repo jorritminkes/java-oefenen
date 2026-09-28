@@ -2,6 +2,8 @@ package nl.jorritminkes;
 
 import java.util.*;
 
+import nl.jorritminkes.exception.EnrollmentException;
+
 public class Student extends Person {
     private String studentId;
     private List<Course> enrolledCourses;
