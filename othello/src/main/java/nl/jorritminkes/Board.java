@@ -23,11 +23,16 @@ public class Board {
     }
 
     public boolean isValidMove(Position position, Disk color) {
+        return !getDisksToFLip(position, color).isEmpty();
+    }
+
+    private List<Position> getDisksToFLip(Position position, Disk color) {
+        List<Position> disksToFlip = new ArrayList<>();
         int row = position.getRow();
         int col = position.getCol();
 
         if (grid[row][col] != Disk.EMPTY) {
-            return false;
+            return disksToFlip;
         }
 
         Disk opponentColor = color.getOpponent();
@@ -36,28 +41,27 @@ public class Board {
             int rowDirection = direction.getRow();
             int colDirection = direction.getCol();
 
-            int nextRow = row + rowDirection;
-            int nextCol = col + colDirection;
+            int currentRow = row + rowDirection;
+            int currentCol = col + colDirection;
 
-            if (isOnBoard(nextRow, nextCol)
-                    && grid[nextRow][nextCol] == opponentColor) {
+            List<Position> tempDirectionDisks = new ArrayList<>();
 
-                while (isOnBoard(nextRow, nextCol)
-                        && grid[nextRow][nextCol] == opponentColor) {
+            while (isOnBoard(currentRow, currentCol)
+                    && grid[currentRow][currentCol] == opponentColor) {
 
-                    nextRow += rowDirection;
-                    nextCol += colDirection;
-                }
+                tempDirectionDisks.add(new Position(currentRow, currentCol));
 
-                if (isOnBoard(nextRow, nextCol)
-                        && grid[nextRow][nextCol] == color) {
-                    return true;
-                }
+                currentRow += rowDirection;
+                currentCol += colDirection;
+            }
+
+            if (isOnBoard(currentRow, currentCol)
+                    && grid[currentRow][currentCol] == color) {
+                disksToFlip.addAll(tempDirectionDisks);
             }
 
         }
-
-        return false;
+        return disksToFlip;
     }
 
     private boolean isOnBoard(int row, int col) {
@@ -66,11 +70,33 @@ public class Board {
     }
 
     public void applyMove(Position position, Disk color) {
+        if (!isValidMove(position, color)) {
+            return;
+        }
 
+        List<Position> disksToFlip = getDisksToFLip(position, color);
+        for (Position positionsToFlip : disksToFlip) {
+            int rowToFlip = positionsToFlip.getRow();
+            int colToFlip = positionsToFlip.getCol();
+            grid[rowToFlip][colToFlip] = color;
+        }
     }
 
     public List<Position> getValidMoves(Disk color) {
-        ArrayList<Position> list = new ArrayList<>();
-        return list;
+        List<Position> validMoves = new ArrayList<>();
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                Position currentPosition = new Position(row, col);
+                Disk disk = grid[row][col];
+
+                if (isValidMove(currentPosition, color) && disk == Disk.EMPTY) {
+                    validMoves.add(currentPosition);
+                }
+
+            }
+        }
+
+        return validMoves;
     }
 }
