@@ -75,6 +75,9 @@ public class Board {
         }
 
         List<Position> disksToFlip = getDisksToFLip(position, color);
+
+        grid[position.getRow()][position.getCol()] = color;
+
         for (Position positionsToFlip : disksToFlip) {
             int rowToFlip = positionsToFlip.getRow();
             int colToFlip = positionsToFlip.getCol();
@@ -96,7 +99,36 @@ public class Board {
 
             }
         }
-
         return validMoves;
     }
+
+    public void printBoard(Disk currentTurn) {
+        System.out.println("   1  2  3  4  5  6  7  8  (Kolom)");
+        System.out.println("  ------------------------");
+
+        List<Position> validMoves = getValidMoves(currentTurn);
+
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            System.out.print((row + 1) + "| "); // Rijnummer aan de zijkant
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                char symbol = '.';
+                Disk disk = grid[row][col];
+
+                if (disk == Disk.BLACK) {
+                    symbol = 'B';
+                } else if (disk == Disk.WHITE) {
+                    symbol = 'W';
+                } else {
+                    Position pos = new Position(row, col);
+                    if (validMoves.contains(pos)) {
+                        symbol = 'o';
+                    }
+                }
+                System.out.print(symbol + "  ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }

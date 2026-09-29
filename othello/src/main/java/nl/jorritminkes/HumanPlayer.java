@@ -9,6 +9,8 @@ public class HumanPlayer implements Player {
         Scanner myObj = new Scanner(System.in);
 
         while (true) {
+            board.printBoard(color);
+
             System.out.println("Geef een rij en kolom (1 tm 8), bijvoorbeeld: 3 4");
             String moveInput = myObj.nextLine().trim();
 
