@@ -31,7 +31,7 @@ public class Board {
         int row = position.getRow();
         int col = position.getCol();
 
-        if (grid[row][col] != Disk.EMPTY) {
+        if (!isOnBoard(row,col) || grid[row][col] != Disk.EMPTY) {
             return disksToFlip;
         }
 
