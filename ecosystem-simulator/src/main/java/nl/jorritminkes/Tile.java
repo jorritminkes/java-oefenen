@@ -1,6 +1,6 @@
 package nl.jorritminkes;
 
-import nl.jorritminkes.Resource.Resource;
+import nl.jorritminkes.resource.Resource;
 import nl.jorritminkes.animal.Animal;
 
 public class Tile {

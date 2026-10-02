@@ -11,8 +11,8 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public abstract class Animal {
-    private Position position;
-    private World world;
+    protected Position position;
+    protected World world;
     private int energy;
     private int health;
     private int vision;
@@ -94,5 +94,67 @@ public abstract class Animal {
             return true;
         }
         return false;
+    }
+
+    protected void stepForwards(Tile targetTile) {
+        int currentX = getPosition().getX();
+        int currentY = getPosition().getY();
+        int targetX = targetTile.getPosition().getX();
+        int targetY = targetTile.getPosition().getY();
+
+        int dx = targetX - currentX;
+        int dy = targetY - currentY;
+
+        int nextX = currentX;
+        int nextY = currentY;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            nextX += (dx > 0) ? 1 : -1;
+        } else if (dy != 0) {
+            nextY += (dy > 0) ? 1 : -1;
+        }
+
+        if (nextX != currentX || nextY != currentY) {
+            setPosition(new Position(nextX, nextY));
+        }
+    }
+
+    protected void makeRandomMove() {
+        int currentX = getPosition().getX();
+        int currentY = getPosition().getY();
+
+        List<Position> possibleMoves = new ArrayList<>();
+
+        if (currentX > 0) {
+            possibleMoves.add(new Position(currentX - 1, currentY));
+        }
+        if (currentX < world.getWidth() - 1) {
+            possibleMoves.add(new Position(currentX + 1, currentY));
+        }
+        if (currentY > 0) {
+            possibleMoves.add(new Position(currentX, currentY - 1));
+        }
+        if (currentY < world.getHeight() - 1) {
+            possibleMoves.add(new Position(currentX, currentY + 1));
+        }
+
+        if (!possibleMoves.isEmpty()) {
+            int randomIndex = (int) (Math.random() * possibleMoves.size());
+            setPosition(possibleMoves.get(randomIndex));
+        }
+    }
+
+    public int getDistanceToResource(Tile currentTile, Tile targetTile) {
+        int xCurrentTile = currentTile.getPosition().getX();
+        int yCurrentTile = currentTile.getPosition().getY();
+        int xTargetTile = targetTile.getPosition().getX();
+        int yTargetTile = targetTile.getPosition().getY();
+        return Math.abs(xCurrentTile - xTargetTile) + Math.abs(yCurrentTile - yTargetTile);
+    }
+
+    public int calculateNetEnergy(int distance, int potentialGain) {
+        int energyLostFromWalking = distance;
+        int energyLostFromExisting = distance;
+        return - energyLostFromWalking - energyLostFromExisting + potentialGain;
     }
 }
