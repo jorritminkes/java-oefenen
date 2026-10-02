@@ -10,4 +10,6 @@ public abstract class Resource {
     public int getEnergyValue() {
         return energyValue;
     }
+
+    public abstract Resource reproduce();
 }

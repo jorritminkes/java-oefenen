@@ -33,6 +33,7 @@ public class Predator extends Animal {
             Animal prey = bestTile.getOccupier();
             prey.takeDamage(100);
             modifyEnergy(40);
+            world.recordPlantEaten();
 
             stepForwards(bestTile);
         } else if (bestTile != null) {

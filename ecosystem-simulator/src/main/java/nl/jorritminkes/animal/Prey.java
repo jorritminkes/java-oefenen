@@ -41,6 +41,7 @@ public class Prey extends Animal {
             Resource food = currentTile.getResource();
             modifyEnergy(food.getEnergyValue());
             currentTile.setResource(null);
+            world.recordPlantEaten();
         }
     }
 }
