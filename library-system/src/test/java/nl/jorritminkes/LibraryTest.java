@@ -7,12 +7,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LibraryTest {
     private Library library;
+    private Book book;
+    private Member member;
 
     @BeforeEach
     void setUp() {
         library = new Library();
         library.addBook("TestTitle", "TestAuthor");
         library.addMember("TestName");
+        book = library.getBookFromBookId(1);
+        member = library.getMemberFromMemberId(1);
     }
 
     @Test
@@ -46,9 +50,8 @@ class LibraryTest {
     @Test
     public void borrowingBookSwitchesAvailability() {
         Book book = library.getBooks().get(1);
-        Member member = library.getMembers().get(1);
 
-        library.borrowBook(book, member);
+        library.borrowBook(1, 1);
 
         assertFalse(book.isAvailable());
     }
@@ -58,7 +61,7 @@ class LibraryTest {
         Book book = library.getBooks().get(1);
         Member member = library.getMembers().get(1);
 
-        library.borrowBook(book, member);
+        library.borrowBook(1, 1);
 
         assertTrue(member.getBorrowedBooks().contains(book));
     }
@@ -69,22 +72,41 @@ class LibraryTest {
             library.addBook("Title" + i, "Author" + i);
         }
 
-        Book book1 = library.getBooks().get(1);
-        Book book2 = library.getBooks().get(2);
-        Book book3 = library.getBooks().get(3);
-        Member member = library.getMembers().get(1);
-
-        library.borrowBook(book1, member);
-        library.borrowBook(book2, member);
-        library.borrowBook(book3, member);
+        library.borrowBook(1, 1);
+        library.borrowBook(2, 1);
+        library.borrowBook(3, 1);
 
         assertThrows(IllegalStateException.class,
-                () -> library.borrowBook(library.getBooks().get(4), member));
+                () -> library.borrowBook(4, 1));
     }
 
+    @Test
+    public void returnBookRemovesFromMemberList() {
+        library.borrowBook(1, 1);
+        library.returnBook(1, 1);
 
+        assertEquals(0, member.getBorrowedBooks().size());
+    }
 
+    @Test
+    public void getBookFromIdReturnsCorrectBook() {
+        assertEquals(book, library.getBookFromBookId(1));
+    }
 
+    @Test
+    public void getMemberFromIdReturnsCorrectMember() {
+        assertEquals(member, library.getMemberFromMemberId(1));
+    }
 
+    @Test
+    public void getAvailableBooksReturnsOneWithoutBorrowed() {
+        assertEquals(1, library.getAvailableBooks().size());
+    }
 
+    @Test
+    public void getAvailableBooksReturnsZeroWhenOneBorrowed() {
+        library.borrowBook(1, 1);
+
+        assertEquals(0, library.getAvailableBooks().size());
+    }
 }

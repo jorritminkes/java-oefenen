@@ -1,6 +1,8 @@
 package nl.jorritminkes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Library {
@@ -30,7 +32,10 @@ public class Library {
         return members;
     }
 
-    public void borrowBook(Book book, Member member) {
+    public void borrowBook(int bookId, int memberId) {
+        Book book = getBookFromBookId(bookId);
+        Member member = getMemberFromMemberId(memberId);
+
         if (!book.isAvailable()) {
             return;
         }
@@ -41,5 +46,37 @@ public class Library {
 
         book.switchAvailable();
         member.addBorrowedBook(book);
+    }
+
+    public void returnBook(int bookId, int memberId) {
+        Book book = getBookFromBookId(bookId);
+        Member member = getMemberFromMemberId(memberId);
+
+        if (!member.getBorrowedBooks().contains(book)) {
+            throw new IllegalStateException("Member has not borrowed the book");
+        }
+
+        member.getBorrowedBooks().remove(book);
+        book.switchAvailable();
+    }
+
+    public Book getBookFromBookId(int bookId) {
+        return books.get(bookId);
+    }
+
+    public Member getMemberFromMemberId(int memberId) {
+        return members.get(memberId);
+    }
+
+    public List<Book> getAvailableBooks() {
+        List<Book> availableBooks = new ArrayList<>();
+
+        for (Book book : books.values()) {
+            if (book.isAvailable()) {
+                availableBooks.add(book);
+            }
+        }
+
+        return availableBooks;
     }
 }
