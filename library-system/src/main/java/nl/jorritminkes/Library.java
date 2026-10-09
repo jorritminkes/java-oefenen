@@ -21,4 +21,12 @@ public class Library {
         Member member = new Member(id, name);
         members.put(id, member);
     }
+
+    public Map<Integer, Book> getBooks() {
+        return books;
+    }
+
+    public Map<Integer, Member> getMembers() {
+        return members;
+    }
 }
