@@ -1,9 +1,6 @@
 package nl.jorritminkes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Library {
     private Map<Integer, Book> books = new HashMap<>();
@@ -25,16 +22,23 @@ public class Library {
     }
 
     public Map<Integer, Book> getBooks() {
-        return books;
+        return Collections.unmodifiableMap(books);
     }
 
     public Map<Integer, Member> getMembers() {
-        return members;
+        return Collections.unmodifiableMap(members);
     }
 
     public void borrowBook(int bookId, int memberId) {
         Book book = getBookFromBookId(bookId);
         Member member = getMemberFromMemberId(memberId);
+
+        if (book == null || !books.containsKey(book.getId())) {
+            throw new IllegalArgumentException("Book does not exist in library");
+        }
+        if (member == null || !members.containsKey(member.getId())) {
+            throw new IllegalArgumentException("Member does not exist in library");
+        }
 
         if (!book.isAvailable()) {
             return;
@@ -44,7 +48,7 @@ public class Library {
             throw new IllegalStateException("Member cannot borrow more than 3 books");
         }
 
-        book.switchAvailable();
+        book.borrow();
         member.addBorrowedBook(book);
     }
 
@@ -52,12 +56,18 @@ public class Library {
         Book book = getBookFromBookId(bookId);
         Member member = getMemberFromMemberId(memberId);
 
+        if (book == null || !books.containsKey(book.getId())) {
+            throw new IllegalArgumentException("Book does not exist in library");
+        }
+        if (member == null || !members.containsKey(member.getId())) {
+            throw new IllegalArgumentException("Member does not exist in library");
+        }
         if (!member.getBorrowedBooks().contains(book)) {
             throw new IllegalStateException("Member has not borrowed the book");
         }
 
         member.getBorrowedBooks().remove(book);
-        book.switchAvailable();
+        book.returnBook();
     }
 
     public Book getBookFromBookId(int bookId) {

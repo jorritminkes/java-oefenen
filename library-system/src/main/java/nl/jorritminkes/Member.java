@@ -21,5 +21,7 @@ public class Member {
         borrowedBooks.add(book);
     }
 
-
+    public int getId() {
+        return id;
+    }
 }

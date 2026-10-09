@@ -28,7 +28,17 @@ public class Book {
         return available;
     }
 
-    public void switchAvailable() {
-        available = !available;
+    public void borrow() {
+        if (!available) {
+            throw new IllegalStateException("Book is already borrowed");
+        }
+        available = false;
+    }
+
+    public void returnBook() {
+        if (available) {
+            throw new IllegalStateException("Book is not currently borrowed");
+        }
+        available = true;
     }
 }

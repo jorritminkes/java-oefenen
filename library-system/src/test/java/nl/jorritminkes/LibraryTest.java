@@ -109,4 +109,44 @@ class LibraryTest {
 
         assertEquals(0, library.getAvailableBooks().size());
     }
+
+    @Test
+    public void borrowingUnavailableBookDoesNotAddItToAnotherMember() {
+        library.addMember("SecondMember");
+
+        library.borrowBook(1, 1);
+        library.borrowBook(1, 2);
+
+        assertEquals(1, member.getBorrowedBooks().size());
+        assertTrue(library.getMemberFromMemberId(2)
+                .getBorrowedBooks().isEmpty());
+    }
+
+    @Test
+    public void returningBookMakesItAvailableAgain() {
+        library.borrowBook(1, 1);
+
+        library.returnBook(1, 1);
+
+        assertTrue(book.isAvailable());
+        assertEquals(1, library.getAvailableBooks().size());
+    }
+
+    @Test
+    public void returningBookNotBorrowedThrowsException() {
+        assertThrows(IllegalStateException.class,
+                () -> library.returnBook(1, 1));
+    }
+
+    @Test
+    public void borrowingUnknownBookIsHandled() {
+        assertThrows(IllegalArgumentException.class,
+                () -> library.borrowBook(999, 1));
+    }
+
+    @Test
+    public void borrowingWithUnknownMemberIsHandled() {
+        assertThrows(IllegalArgumentException.class,
+                () -> library.borrowBook(1, 999));
+    }
 }
