@@ -35,6 +35,10 @@ public class Library {
             return;
         }
 
+        if (member.getBorrowedBooks().size() >= 3) {
+            throw new IllegalStateException("Member cannot borrow more than 3 books");
+        }
+
         book.switchAvailable();
         member.addBorrowedBook(book);
     }
