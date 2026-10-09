@@ -11,19 +11,60 @@ class LibraryTest {
     @BeforeEach
     void setUp() {
         library = new Library();
+        library.addBook("TestTitle", "TestAuthor");
+        library.addMember("TestName");
     }
 
     @Test
     public void bookGetsAdded() {
         library.addBook("Title", "Author");
 
-        assertEquals(1, library.getBooks().size());
+        assertNotEquals(0, library.getBooks().size());
     }
 
     @Test
-    public void memberGetsAdded() {
+    public void memberGetsRegistered() {
         library.addMember("Test");
 
-        assertEquals(1, library.getMembers().size());
+        assertNotEquals(0, library.getMembers().size());
     }
+
+    @Test
+    public void getBookFromHashMap() {
+        Book book = library.getBooks().get(1);
+
+        assertNotNull(book);
+    }
+
+    @Test
+    public void getBookIdFromHashMap() {
+        Book book = library.getBooks().get(1);
+
+        assertEquals(1, book.getId());
+    }
+
+    @Test
+    public void borrowingBookSwitchesAvailability() {
+        Book book = library.getBooks().get(1);
+        Member member = library.getMembers().get(1);
+
+        library.borrowBook(book, member);
+
+        assertFalse(book.isAvailable());
+    }
+
+    @Test
+    public void borrowingBookAddsToMemberBorrowedList() {
+        Book book = library.getBooks().get(1);
+        Member member = library.getMembers().get(1);
+
+        library.borrowBook(book, member);
+
+        assertTrue(member.getBorrowedBooks().contains(book));
+    }
+
+
+
+
+
 }

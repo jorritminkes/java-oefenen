@@ -29,4 +29,13 @@ public class Library {
     public Map<Integer, Member> getMembers() {
         return members;
     }
+
+    public void borrowBook(Book book, Member member) {
+        if (!book.isAvailable()) {
+            return;
+        }
+
+        book.switchAvailable();
+        member.addBorrowedBook(book);
+    }
 }
