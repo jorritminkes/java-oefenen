@@ -1,26 +1,23 @@
 package nl.jorritminkes;
 
 public abstract class Hole {
-    private Hole firstHole;
+    private final Hole firstHole;
     private Hole nextHole;
-    private Player owner;
-    private int holeNumber;
-    private int seeds;
+    private final Player owner;
+    private final int holeNumber;
     public final int PITS_PER_SIDE = 6;
     public final int BOARD_SIZE = 7;
 
-    public Hole(Player owner, int holeNumber, int seeds) {
+    public Hole(Player owner, int holeNumber) {
         this.firstHole = this;
         this.owner = owner;
         this.holeNumber = holeNumber;
-        this.seeds = seeds;
     }
 
-    public Hole(Hole firstHole, Player owner, int holeNumber, int seeds) {
+    public Hole(Hole firstHole, Player owner, int holeNumber) {
         this.firstHole = firstHole;
         this.owner = owner;
         this.holeNumber = holeNumber;
-        this.seeds = seeds;
     }
 
     public Hole getFirstHole() {
@@ -39,15 +36,9 @@ public abstract class Hole {
         return holeNumber;
     }
 
-    public int getSeeds() {
-        return seeds;
-    }
-
     public final void setNextHole(Hole nextHole) {
         this.nextHole = nextHole;
     }
 
     public abstract Hole getHoleAt(int holeNumber);
-
-
 }
