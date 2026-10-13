@@ -10,6 +10,8 @@ public class Mancala extends Hole {
         } else {
             setNextHole(firstHole);
         }
+        
+        getOwner().setMancala(this);
     }
 
     @Override

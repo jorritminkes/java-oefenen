@@ -3,6 +3,7 @@ package nl.jorritminkes;
 public class Player {
     private boolean isToMove;
     private Player opponent;
+    private Mancala mancala;
 
     public Player() {
         this.isToMove = true;
@@ -29,5 +30,13 @@ public class Player {
 
     public boolean isToMove() {
         return isToMove;
+    }
+
+    void setMancala(Mancala mancala) {
+        this.mancala = mancala;
+    }
+
+    Mancala getMancala() {
+        return mancala;
     }
 }

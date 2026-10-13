@@ -8,6 +8,7 @@ public abstract class Hole {
     private final int holeNumber;
     public final int PITS_PER_SIDE = 6;
     public final int BOARD_SIZE = 7;
+    public final int TOTAL_HOLES = 14;
 
     public Hole(Player owner, int holeNumber, int seeds) {
         this.firstHole = this;

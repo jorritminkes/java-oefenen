@@ -45,6 +45,13 @@ class PitTest {
         assertEquals(firstPit, firstPit.getHoleAt(15));
     }
 
+    @Test
+    void pitFifteenIsPitOneHoleNumber() {
+        Hole pitFifteen = firstPit.getHoleAt(15);
+
+        assertEquals(firstPit.getHoleNumber(), pitFifteen.getHoleNumber());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14})
     void firstPitCanFindEachPit(int holeNumber) {
@@ -95,10 +102,62 @@ class PitTest {
     void moveDoesNotAddToOtherMancala() {
         Hole mancala2 = firstPit.getHoleAt(14);
 
-        firstPit.setSeeds(13);
+        firstPit.setSeeds(15);
         firstPit.move();
 
         assertEquals(0, mancala2.getSeeds());
     }
 
+    @Test
+    void pitWithFourteenSeedsAddsToItself() {
+        firstPit.setSeeds(15);
+        firstPit.move();
+
+        assertEquals(1, firstPit.getSeeds());
+    }
+
+    @Test
+    void landOnEmptyPitStealsOwn() {
+        Pit targetPit = (Pit) firstPit.getHoleAt(5);
+
+        targetPit.setSeeds(0);
+        firstPit.move();
+
+        assertEquals(0, targetPit.getSeeds());
+    }
+
+    @Test
+    void landOnEmptyPitStealsOthers() {
+        Pit targetPit = (Pit) firstPit.getHoleAt(5);
+        Pit targetPitNeighbor = targetPit.getNeighborPit();
+
+        targetPit.setSeeds(0);
+        firstPit.move();
+
+        assertEquals(0, targetPitNeighbor.getSeeds());
+    }
+
+    @Test
+    void landOnEmptyPitFillsMancala() {
+        Pit targetPit = (Pit) firstPit.getHoleAt(5);
+
+        targetPit.setSeeds(0);
+        firstPit.move();
+
+        assertEquals(5, firstPit.getOwner().getMancala().getSeeds());
+    }
+
+    @Test
+    void PlayerOneCanFindItsMancala() {
+        Player playerOne = firstPit.getOwner();
+
+        assertEquals(firstPit.getHoleAt(7), playerOne.getMancala());
+    }
+
+    @Test
+    void PlayerTwoCanFindItsMancala() {
+        Player playerTwo = firstPit.getOwner().getOpponent();
+
+        assertEquals(firstPit.getHoleAt(14), playerTwo.getMancala());
+    }
 }
