@@ -32,6 +32,11 @@ public class Player {
         return isToMove;
     }
 
+    void switchMove() {
+        isToMove = !isToMove;
+        opponent.isToMove = !opponent.isToMove;
+    }
+
     void setMancala(Mancala mancala) {
         this.mancala = mancala;
     }

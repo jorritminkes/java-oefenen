@@ -36,7 +36,7 @@ public class Mancala extends Hole {
         } else {
             seedsToPass = seedsLeft;
         }
-        if (seedsLeft >= 2) {
+        if (seedsToPass >= 2) {
             getNextHole().sow(seedsToPass);
         }
     }

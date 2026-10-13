@@ -45,6 +45,7 @@ public class Pit extends Hole {
             int seedsToPass = getSeeds();
             setSeeds(0);
             getNextHole().sow(seedsToPass);
+            getOwner().switchMove();
         } else {
             throw new IllegalStateException("Can not play on empty string");
         }
@@ -56,18 +57,18 @@ public class Pit extends Hole {
 
     @Override
     void sow(int seedsLeft) {
-        int seedsAtPitBeforePassing = getSeeds();
+        boolean wasEmpty = getSeeds() == 0;
+        Pit neighbor = getNeighborPit();
 
         setSeeds(getSeeds() + 1);
 
         if (seedsLeft >= 2) {
             getNextHole().sow(seedsLeft - 1);
-        } else if (seedsAtPitBeforePassing == 0 && getNeighborPit().getSeeds() != 0) {
-            int capturedSeeds = getSeeds() + getNeighborPit().getSeeds();
+        } else if (wasEmpty && neighbor.getSeeds() != 0 && getOwner().isToMove()) {
             Mancala mancala = getOwner().getMancala();
-            mancala.setSeeds(mancala.getSeeds() + capturedSeeds);
+            mancala.setSeeds(mancala.getSeeds() + getSeeds() + neighbor.getSeeds());
             emptyPit();
-            getNeighborPit().emptyPit();
+            neighbor.emptyPit();
         }
     }
 }
