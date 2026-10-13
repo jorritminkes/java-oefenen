@@ -47,4 +47,16 @@ class PitTest {
 
         assertEquals(holeNumber, holeAtNumber.getHoleNumber());
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 8, 9, 10, 11 ,12 ,13})
+    void pitHasFourSeeds(int pitNumber) {
+        assertEquals(4, firstPit.getHoleAt(pitNumber).getSeeds());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {7, 14})
+    void mancalaHasZeroSeeds(int mancalaNumber) {
+        assertEquals(0, firstPit.getHoleAt(mancalaNumber).getSeeds());
+    }
 }

@@ -2,11 +2,11 @@ package nl.jorritminkes;
 
 public class Mancala extends Hole {
 
-    public Mancala(Hole firstHole, Player owner, int holeNumber) {
-        super(firstHole, owner, holeNumber);
+    public Mancala(Hole firstHole, Player owner, int holeNumber, int seeds) {
+        super(firstHole, owner, holeNumber, seeds);
 
         if (holeNumber == BOARD_SIZE) {
-            setNextHole(new Pit(firstHole, getOwner().getOpponent(), holeNumber + 1));
+            setNextHole(new Pit(firstHole, getOwner().getOpponent(), holeNumber + 1, 4));
         } else {
             setNextHole(firstHole);
         }

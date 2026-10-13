@@ -3,17 +3,17 @@ package nl.jorritminkes;
 public class Pit extends Hole {
 
     public Pit() {
-        super(new Player(), 1);
-        setNextHole(new Pit(this, getOwner(), getHoleNumber() + 1));
+        super(new Player(), 1, 4);
+        setNextHole(new Pit(this, getOwner(), getHoleNumber() + 1, 4));
     }
 
-    public Pit(Hole firstHole, Player owner, int holeNumber) {
-        super(firstHole, owner, holeNumber);
+    public Pit(Hole firstHole, Player owner, int holeNumber, int seeds) {
+        super(firstHole, owner, holeNumber, seeds);
 
         if (holeNumber == PITS_PER_SIDE || holeNumber == BOARD_SIZE + PITS_PER_SIDE) {
-            setNextHole(new Mancala(firstHole, owner, holeNumber + 1));
+            setNextHole(new Mancala(firstHole, owner, holeNumber + 1, 0));
         } else {
-            setNextHole(new Pit(firstHole, owner, holeNumber + 1));
+            setNextHole(new Pit(firstHole, owner, holeNumber + 1, 4));
         }
     }
 
