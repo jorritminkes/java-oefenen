@@ -16,7 +16,7 @@ class PlayerTest {
 
     @Test
     void playerOneExists() {
-        assertNotEquals(null, playerOne);
+        assertInstanceOf(Player.class, playerOne);
     }
 
 }
