@@ -30,7 +30,24 @@ public class Pit extends Hole {
         }
     }
 
-//    public void move() {
-//        if (getOwner() == )
-//    }
+    public void move() {
+        if (!getOwner().isToMove()) {
+            throw new IllegalStateException("It is the other player's turn");
+        }
+        if (getSeeds() > 0) {
+            int seedsToPass = getSeeds();
+            setSeeds(0);
+            getNextHole().sow(seedsToPass);
+        } else {
+            throw new IllegalStateException("Can not play on empty string");
+        }
+    }
+
+    @Override
+    void sow(int seedsLeft) {
+        setSeeds(getSeeds() + 1);
+        if (seedsLeft >= 2) {
+            getNextHole().sow(seedsLeft - 1);
+        }
+    }
 }

@@ -43,9 +43,15 @@ public abstract class Hole {
         return seeds;
     }
 
+    void setSeeds(int seeds) {
+        this.seeds = seeds;
+    }
+
     public final void setNextHole(Hole nextHole) {
         this.nextHole = nextHole;
     }
 
     public abstract Hole getHoleAt(int holeNumber);
+
+    abstract void sow(int seedsLeft);
 }

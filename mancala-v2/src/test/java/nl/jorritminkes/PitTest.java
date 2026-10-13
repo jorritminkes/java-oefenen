@@ -40,6 +40,11 @@ class PitTest {
         assertEquals(firstPit, firstPit.getNextHole().getNextHole().getNextHole().getNextHole().getNextHole().getNextHole().getFirstHole());
     }
 
+    @Test
+    void pitFifteenIsPitOne() {
+        assertEquals(firstPit, firstPit.getHoleAt(15));
+    }
+
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14})
     void firstPitCanFindEachPit(int holeNumber) {
@@ -59,4 +64,41 @@ class PitTest {
     void mancalaHasZeroSeeds(int mancalaNumber) {
         assertEquals(0, firstPit.getHoleAt(mancalaNumber).getSeeds());
     }
+
+    @Test
+    void moveEmptiesPit() {
+        firstPit.move();
+
+        assertEquals(0, firstPit.getSeeds());
+    }
+
+    @Test
+    void moveAddsSeedToNextPit() {
+        Hole secondPit = firstPit.getNextHole();
+
+        firstPit.move();
+
+        assertEquals(5, secondPit.getSeeds());
+    }
+
+    @Test
+    void moveAddsToOwnMancala() {
+        Hole pit6 = firstPit.getHoleAt(6);
+        Hole mancala1 = firstPit.getHoleAt(7);
+
+        ((Pit) pit6).move();
+
+        assertEquals(1, mancala1.getSeeds());
+    }
+
+    @Test
+    void moveDoesNotAddToOtherMancala() {
+        Hole mancala2 = firstPit.getHoleAt(14);
+
+        firstPit.setSeeds(13);
+        firstPit.move();
+
+        assertEquals(0, mancala2.getSeeds());
+    }
+
 }
