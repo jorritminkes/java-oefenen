@@ -16,6 +16,19 @@ class PitTest {
         firstPit = new Pit();
     }
 
+    public void playShortestGame() {
+        ((Pit) firstPit.getHoleAt(3)).move();
+        ((Pit) firstPit.getHoleAt(6)).move();
+        ((Pit) firstPit.getHoleAt(9)).move();
+        ((Pit) firstPit.getHoleAt(10)).move();
+        ((Pit) firstPit.getHoleAt(1)).move();
+        ((Pit) firstPit.getHoleAt(11)).move();
+        ((Pit) firstPit.getHoleAt(1)).move();
+        ((Pit) firstPit.getHoleAt(12)).move();
+        ((Pit) firstPit.getHoleAt(1)).move();
+        ((Pit) firstPit.getHoleAt(13)).move();
+    }
+
     @Test
     void firstPitGetsCreated() {
         assertNotNull(firstPit);
