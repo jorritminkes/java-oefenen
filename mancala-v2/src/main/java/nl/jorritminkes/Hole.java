@@ -54,5 +54,5 @@ public abstract class Hole {
 
     public abstract Hole getHoleAt(int holeNumber);
 
-    abstract void sow(int seedsLeft);
+    abstract Hole sow(int seedsLeft);
 }

@@ -1,6 +1,5 @@
 package nl.jorritminkes;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -174,4 +173,35 @@ class PitTest {
 
         assertEquals(firstPit.getHoleAt(14), playerTwo.getMancala());
     }
+
+    @Test
+    void moveWithoutHavingTurn() {
+        firstPit.move();
+
+        assertThrows(IllegalStateException.class, () -> {
+            firstPit.move();
+        }, "Calling move when it is not your turn");
+    }
+
+    @Test
+    void turnSwitchesToAllowOtherPlayerToMove() {
+        firstPit.move();
+
+        assertDoesNotThrow(() -> {
+                ((Pit) firstPit.getHoleAt(8)).move();
+        }, "Turn switches correctly if player one plays first pit first");
+    }
+
+//    @Test
+//    void shortestGameGivesEmptyBoard() {
+//        playShortestGame();
+//        int totalSeeds = 0;
+//        for (int holeNumber = 1; holeNumber < 15; holeNumber++) {
+//            Hole targetHole = firstPit.getHoleAt(holeNumber);
+//            totalSeeds += targetHole.getSeeds();
+//        }
+//        assertEquals(0, totalSeeds);
+//    }
+
+
 }

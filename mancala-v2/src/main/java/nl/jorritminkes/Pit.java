@@ -41,13 +41,16 @@ public class Pit extends Hole {
         if (!getOwner().isToMove()) {
             throw new IllegalStateException("It is the other player's turn");
         }
-        if (getSeeds() > 0) {
-            int seedsToPass = getSeeds();
-            setSeeds(0);
-            getNextHole().sow(seedsToPass);
-            getOwner().switchMove();
-        } else {
+        if (getSeeds() == 0) {
             throw new IllegalStateException("Can not play on empty string");
+        }
+
+        int seedsToPass = getSeeds();
+        setSeeds(0);
+        Hole lastHole = getNextHole().sow(seedsToPass);
+
+        if (lastHole != getOwner().getMancala()) {
+            getOwner().switchMove();
         }
     }
 
@@ -56,19 +59,20 @@ public class Pit extends Hole {
     }
 
     @Override
-    void sow(int seedsLeft) {
+    Hole sow(int seedsLeft) {
         boolean wasEmpty = getSeeds() == 0;
         Pit neighbor = getNeighborPit();
 
         setSeeds(getSeeds() + 1);
 
         if (seedsLeft >= 2) {
-            getNextHole().sow(seedsLeft - 1);
+            return getNextHole().sow(seedsLeft - 1);
         } else if (wasEmpty && neighbor.getSeeds() != 0 && getOwner().isToMove()) {
             Mancala mancala = getOwner().getMancala();
             mancala.setSeeds(mancala.getSeeds() + getSeeds() + neighbor.getSeeds());
             emptyPit();
             neighbor.emptyPit();
         }
+        return this;
     }
 }

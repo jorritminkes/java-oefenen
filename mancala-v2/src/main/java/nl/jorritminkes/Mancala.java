@@ -28,16 +28,11 @@ public class Mancala extends Hole {
     }
 
     @Override
-    void sow(int seedsLeft) {
-        int seedsToPass;
-        if (getOwner().isToMove()) {
-            setSeeds(getSeeds() + 1);
-            seedsToPass = seedsLeft - 1;
-        } else {
-            seedsToPass = seedsLeft;
+    Hole sow(int seedsLeft) {
+        if (!getOwner().isToMove()) {
+            return getNextHole().sow(seedsLeft);
         }
-        if (seedsToPass >= 2) {
-            getNextHole().sow(seedsToPass);
-        }
+        setSeeds(getSeeds() + 1);
+        return seedsLeft >= 2 ? getNextHole().sow(seedsLeft - 1) : this;
     }
 }
