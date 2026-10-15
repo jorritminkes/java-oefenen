@@ -19,7 +19,7 @@ public class Player {
         this.opponent = new Player(this);
     }
 
-    public Player(Player opponent) {
+    private Player(Player opponent) {
         this.opponent = opponent;
         this.isToMove = !opponent.isToMove;
     }

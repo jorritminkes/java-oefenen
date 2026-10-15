@@ -192,16 +192,49 @@ class PitTest {
         }, "Turn switches correctly if player one plays first pit first");
     }
 
-//    @Test
-//    void shortestGameGivesEmptyBoard() {
-//        playShortestGame();
-//        int totalSeeds = 0;
-//        for (int holeNumber = 1; holeNumber < 15; holeNumber++) {
-//            Hole targetHole = firstPit.getHoleAt(holeNumber);
-//            totalSeeds += targetHole.getSeeds();
-//        }
-//        assertEquals(0, totalSeeds);
-//    }
+    @Test
+    void seedsForPlayerCountsInitialSeedsForPlayerOne() {
+        int seedsForPlayerOne = firstPit.seedsForPlayer(firstPit.getOwner());
 
+        assertEquals(24, seedsForPlayerOne);
+    }
 
+    @Test
+    void totalSeedsAfterMoveCorrect() {
+        ((Pit) firstPit.getHoleAt(6)).move();
+        int seedsForPlayerOne = firstPit.seedsForPlayer(firstPit.getOwner());
+
+        assertEquals(20, seedsForPlayerOne);
+    }
+
+    @Test
+    void gameNowOverWhenNonEmptyRow() {
+        assertFalse(firstPit.isGameOver());
+    }
+
+    @Test
+    void gameIsOverWhenEmptyRow() {
+        for (int holeNumber = 1; holeNumber < 7; holeNumber++) {
+            firstPit.getHoleAt(holeNumber).setSeeds(0);
+        }
+
+        assertTrue(firstPit.isGameOver());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6, 8, 9, 10, 11 ,12 ,13})
+    void shortestGameGivesEmptyBoard(int pitNumber) {
+        playShortestGame();
+        assertEquals(0, firstPit.getHoleAt(pitNumber).getSeeds());
+    }
+
+    @Test
+    void mancalasHoldAllSeedsAfterShortestGame() {
+        playShortestGame();
+        int mancalaOneSeeds = firstPit.getOwner().getMancala().getSeeds();
+        int mancalaTwoSeeds = firstPit.getOwner().getOpponent().getMancala().getSeeds();
+        int totalSeeds = mancalaOneSeeds + mancalaTwoSeeds;
+
+        assertEquals(48, totalSeeds);
+    }
 }

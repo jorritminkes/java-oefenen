@@ -6,9 +6,9 @@ public abstract class Hole {
     private int seeds;
     private final Player owner;
     private final int holeNumber;
-    public final int PITS_PER_SIDE = 6;
-    public final int BOARD_SIZE = 7;
-    public final int TOTAL_HOLES = 14;
+    public static final int PITS_PER_SIDE = 6;
+    public static final int BOARD_SIZE = 7;
+    public static final int TOTAL_HOLES = 14;
 
     public Hole(Player owner, int holeNumber, int seeds) {
         this.firstHole = this;
@@ -55,4 +55,6 @@ public abstract class Hole {
     public abstract Hole getHoleAt(int holeNumber);
 
     abstract Hole sow(int seedsLeft);
+
+    abstract void sweepSeeds(int carried);
 }

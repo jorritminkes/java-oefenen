@@ -8,7 +8,7 @@ public class Pit extends Hole {
     }
 
     public Pit(Hole firstHole, Player owner, int holeNumber, int seeds) {
-        super(firstHole, owner, holeNumber, 4);
+        super(firstHole, owner, holeNumber, seeds);
 
         if (holeNumber == PITS_PER_SIDE || holeNumber == BOARD_SIZE + PITS_PER_SIDE) {
             setNextHole(new Mancala(firstHole, owner, holeNumber + 1, 0));
@@ -19,7 +19,7 @@ public class Pit extends Hole {
 
     @Override
     public Hole getHoleAt(int steps) {
-        if (steps <= 0) {
+        if (steps < 1) {
             throw new IllegalStateException("Invalid value for getHoleAt");
         }
 
@@ -42,7 +42,7 @@ public class Pit extends Hole {
             throw new IllegalStateException("It is the other player's turn");
         }
         if (getSeeds() == 0) {
-            throw new IllegalStateException("Can not play on empty string");
+            throw new IllegalStateException("Can not play on empty pit");
         }
 
         int seedsToPass = getSeeds();
@@ -52,6 +52,8 @@ public class Pit extends Hole {
         if (lastHole != getOwner().getMancala()) {
             getOwner().switchMove();
         }
+
+        emptyRowsWhenGameOver();
     }
 
     private void emptyPit() {
@@ -74,5 +76,41 @@ public class Pit extends Hole {
             neighbor.emptyPit();
         }
         return this;
+    }
+
+    @Override
+    void sweepSeeds(int carried) {
+        int total = carried + getSeeds();
+        emptyPit();
+        getNextHole().sweepSeeds(total);
+    }
+
+    void emptyRowsWhenGameOver() {
+        if (isGameOver()) {
+            Hole firstPitPlayerOne = getFirstHole();
+            Hole firstPitPlayerTwo = firstPitPlayerOne.getOwner().getMancala().getNextHole();
+
+            firstPitPlayerOne.sweepSeeds(0);
+            firstPitPlayerTwo.sweepSeeds(0);
+        }
+    }
+
+    boolean isGameOver() {
+        if (seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOwner().getOpponent()) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    int seedsForPlayer(Player player) {
+        Hole targetPit = player.getOpponent().getMancala().getNextHole();
+        int totalSeeds = 0;
+
+        for (int pit = 1; pit <= PITS_PER_SIDE; pit++) {
+            totalSeeds += targetPit.getSeeds();
+            targetPit = targetPit.getNextHole();
+        }
+        return totalSeeds;
     }
 }

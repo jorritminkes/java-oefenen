@@ -3,7 +3,7 @@ package nl.jorritminkes;
 public class Mancala extends Hole {
 
     public Mancala(Hole firstHole, Player owner, int holeNumber, int seeds) {
-        super(firstHole, owner, holeNumber, 0);
+        super(firstHole, owner, holeNumber, seeds);
 
         if (holeNumber == BOARD_SIZE) {
             setNextHole(new Pit(firstHole, getOwner().getOpponent(), holeNumber + 1, 4));
@@ -34,5 +34,10 @@ public class Mancala extends Hole {
         }
         setSeeds(getSeeds() + 1);
         return seedsLeft >= 2 ? getNextHole().sow(seedsLeft - 1) : this;
+    }
+
+    @Override
+    void sweepSeeds(int carried) {
+        setSeeds(getSeeds() + carried);
     }
 }
