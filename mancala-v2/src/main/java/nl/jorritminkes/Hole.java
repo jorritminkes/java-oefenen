@@ -59,11 +59,8 @@ public abstract class Hole {
     public Hole getHoleRelative(int steps) {
         if (steps < 0) {
             throw new IllegalStateException("Invalid value for getHoleAt");
-        } else if (steps == 0) {
-            return this;
-        } else {
-            return getNextHole().getHoleRelative(steps - 1);
         }
+        return steps == 0 ? this : getNextHole().getHoleRelative(steps - 1);
     }
 
     Hole getHoleAt(int holeNumber) {

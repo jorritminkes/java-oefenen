@@ -7,10 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerTest {
     private Player playerOne;
+    private Player opponent;
 
     @BeforeEach
     void setUp() {
         playerOne = new Player();
+        opponent = playerOne.getOpponent();
     }
 
 
@@ -139,5 +141,29 @@ class PlayerTest {
         playerOne.setMancala(mancala);
 
         assertSame(mancala, playerOne.getMancala());
+    }
+
+    @Test
+    void playerOneHasNumberOne() {
+        assertEquals(1, playerOne.getNumber());
+    }
+
+    @Test
+    void opponentHasNumberTwo() {
+        assertEquals(2, opponent.getNumber());
+    }
+
+    @Test
+    void opponentOfOpponentIsPlayerOne() {
+        assertSame(playerOne, opponent.getOpponent());
+    }
+
+    @Test
+    void playerTwoStartingKeepsNumbers() {
+        Player p = new Player(2);
+
+        assertFalse(p.isToMove());
+        assertEquals(1, p.getNumber());
+        assertTrue(p.getOpponent().isToMove());
     }
 }

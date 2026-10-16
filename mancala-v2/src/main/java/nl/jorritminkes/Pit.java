@@ -101,7 +101,7 @@ public class Pit extends Hole {
         return Optional.empty();
     }
 
-    boolean isGameOver() {
+    public boolean isGameOver() {
         return seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOpponent()) == 0;
     }
 
