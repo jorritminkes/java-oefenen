@@ -19,23 +19,21 @@ public class Pit extends Hole {
         }
     }
 
-    @Override
-    public Hole getHoleAt(int steps) {
-        if (steps < 1) {
-            throw new IllegalStateException("Invalid value for getHoleAt");
-        }
-
-        if (steps == 1) {
-            return this;
-        } else {
-            return getNextHole().getHoleAt(steps - 1);
-        }
-    }
-
     Pit getNeighborPit() {
         int neighborHoleNumber = TOTAL_HOLES - getHoleNumber();
 
         return (Pit) getFirstHole().getHoleAt(neighborHoleNumber);
+    }
+
+    public Player getCurrentPlayer() {
+        return getOwner().isToMove() ? getOwner() : getOpponent();
+    }
+
+    public void play(int holeNumber) {
+        if (!(getHoleAt(holeNumber) instanceof Pit pit)) {
+            throw new IllegalArgumentException("Hole " + holeNumber + " is a mancala, not a pit");
+        }
+        pit.move();
     }
 
     public void move() {

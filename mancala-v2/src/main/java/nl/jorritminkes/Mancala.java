@@ -15,19 +15,6 @@ public class Mancala extends Hole {
     }
 
     @Override
-    public Hole getHoleAt(int steps) {
-        if (steps < 1 || steps > 14) {
-            throw new IllegalStateException("Invalid value for getHoleAt");
-        }
-
-        if (steps == 1) {
-            return this;
-        } else {
-            return getNextHole().getHoleAt(steps - 1);
-        }
-    }
-
-    @Override
     Hole sow(int seedsLeft) {
         if (!getOwner().isToMove()) {
             return getNextHole().sow(seedsLeft);

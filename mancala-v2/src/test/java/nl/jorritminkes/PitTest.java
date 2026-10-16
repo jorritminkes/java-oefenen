@@ -302,4 +302,12 @@ class PitTest {
 
         assertNull(firstPit.getWinner(), "Winner is null in a tie");
     }
+
+    @Test
+    void getHoleAtWorksFromOtherPits() {
+        Hole hole2 = firstPit.getNextHole();
+        Hole hole3 = hole2.getNextHole();
+
+        assertEquals(hole3, hole2.getHoleAt(3));
+    }
 }

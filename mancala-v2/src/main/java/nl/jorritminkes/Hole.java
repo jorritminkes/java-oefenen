@@ -56,7 +56,33 @@ public abstract class Hole {
         this.nextHole = nextHole;
     }
 
-    public abstract Hole getHoleAt(int holeNumber);
+    public Hole getHoleRelative(int steps) {
+        if (steps < 0) {
+            throw new IllegalStateException("Invalid value for getHoleAt");
+        } else if (steps == 0) {
+            return this;
+        } else {
+            return getNextHole().getHoleRelative(steps - 1);
+        }
+    }
+
+    Hole getHoleAt(int holeNumber) {
+        if (holeNumber < 1) {
+            throw new IllegalArgumentException(
+                    "Hole number must be 1 at a minimum");
+        }
+        return firstHole.getHoleRelative(holeNumber - 1);
+    }
+
+    public int getSeedsAt(int holeNumber) {
+        return getHoleAt(holeNumber).getSeeds();
+    }
+
+    public int getScore(Player player) {
+        return player.getMancala().getSeeds();
+    }
+
+
 
     abstract Hole sow(int seedsLeft);
 
