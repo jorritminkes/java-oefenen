@@ -237,4 +237,46 @@ class PitTest {
 
         assertEquals(48, totalSeeds);
     }
+
+    @Test
+    void landingOnOwnMancalaGrantsAnotherTurn() {
+        ((Pit) firstPit.getHoleAt(3)).move();
+
+        assertDoesNotThrow(() -> {
+            firstPit.move();
+        }, "Landing on own mancala should allow the same player to move again");
+    }
+
+    @Test
+    void movingEmptyPitThrowsException() {
+        Pit emptyPit = (Pit) firstPit.getHoleAt(1);
+        emptyPit.setSeeds(0);
+
+        assertThrows(IllegalStateException.class, emptyPit::move,
+                "Moving a pit with zero seeds should throw an exception");
+    }
+
+    @Test
+    void getHoleAtInvalidIndexThrowsException() {
+        assertThrows(IllegalStateException.class, () -> {
+            firstPit.getHoleAt(0);
+        }, "Fetching a hole with index 0 or lower should throw an exception");
+    }
+
+    @Test
+    void seedsForPlayerCountsInitialSeedsForPlayerTwo() {
+        Player playerTwo = firstPit.getOwner().getOpponent();
+        int seedsForPlayerTwo = firstPit.seedsForPlayer(playerTwo);
+
+        assertEquals(24, seedsForPlayerTwo);
+    }
+
+    @Test
+    void gameIsOverWhenPlayerTwoRowEmpty() {
+        for (int holeNumber = 8; holeNumber < 14; holeNumber++) {
+            firstPit.getHoleAt(holeNumber).setSeeds(0);
+        }
+
+        assertTrue(firstPit.isGameOver(), "Game should be over when player two's row is empty");
+    }
 }
