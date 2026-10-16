@@ -6,7 +6,7 @@ public class Mancala extends Hole {
         super(firstHole, owner, holeNumber, seeds);
 
         if (holeNumber == BOARD_SIZE) {
-            setNextHole(new Pit(firstHole, getOwner().getOpponent(), holeNumber + 1, 4));
+            setNextHole(new Pit(firstHole, getOpponent(), holeNumber + 1, 4));
         } else {
             setNextHole(firstHole);
         }

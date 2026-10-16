@@ -9,10 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PitTest {
     private Pit firstPit;
+    private Player playerOne;
+    private Player opponent;
 
     @BeforeEach
     void setUp() {
         firstPit = new Pit();
+        playerOne = firstPit.getOwner();
+        opponent = playerOne.getOpponent();
     }
 
     public void playShortestGame() {
@@ -157,21 +161,17 @@ class PitTest {
         targetPit.setSeeds(0);
         firstPit.move();
 
-        assertEquals(5, firstPit.getOwner().getMancala().getSeeds());
+        assertEquals(5, playerOne.getMancala().getSeeds());
     }
 
     @Test
     void PlayerOneCanFindItsMancala() {
-        Player playerOne = firstPit.getOwner();
-
         assertEquals(firstPit.getHoleAt(7), playerOne.getMancala());
     }
 
     @Test
     void PlayerTwoCanFindItsMancala() {
-        Player playerTwo = firstPit.getOwner().getOpponent();
-
-        assertEquals(firstPit.getHoleAt(14), playerTwo.getMancala());
+        assertEquals(firstPit.getHoleAt(14), opponent.getMancala());
     }
 
     @Test
@@ -194,7 +194,7 @@ class PitTest {
 
     @Test
     void seedsForPlayerCountsInitialSeedsForPlayerOne() {
-        int seedsForPlayerOne = firstPit.seedsForPlayer(firstPit.getOwner());
+        int seedsForPlayerOne = firstPit.seedsForPlayer(playerOne);
 
         assertEquals(24, seedsForPlayerOne);
     }
@@ -202,7 +202,7 @@ class PitTest {
     @Test
     void totalSeedsAfterMoveCorrect() {
         ((Pit) firstPit.getHoleAt(6)).move();
-        int seedsForPlayerOne = firstPit.seedsForPlayer(firstPit.getOwner());
+        int seedsForPlayerOne = firstPit.seedsForPlayer(playerOne);
 
         assertEquals(20, seedsForPlayerOne);
     }
@@ -231,8 +231,8 @@ class PitTest {
     @Test
     void mancalasHoldAllSeedsAfterShortestGame() {
         playShortestGame();
-        int mancalaOneSeeds = firstPit.getOwner().getMancala().getSeeds();
-        int mancalaTwoSeeds = firstPit.getOwner().getOpponent().getMancala().getSeeds();
+        int mancalaOneSeeds = playerOne.getMancala().getSeeds();
+        int mancalaTwoSeeds = opponent.getMancala().getSeeds();
         int totalSeeds = mancalaOneSeeds + mancalaTwoSeeds;
 
         assertEquals(48, totalSeeds);
@@ -265,8 +265,7 @@ class PitTest {
 
     @Test
     void seedsForPlayerCountsInitialSeedsForPlayerTwo() {
-        Player playerTwo = firstPit.getOwner().getOpponent();
-        int seedsForPlayerTwo = firstPit.seedsForPlayer(playerTwo);
+        int seedsForPlayerTwo = firstPit.seedsForPlayer(opponent);
 
         assertEquals(24, seedsForPlayerTwo);
     }
@@ -278,5 +277,29 @@ class PitTest {
         }
 
         assertTrue(firstPit.isGameOver(), "Game should be over when player two's row is empty");
+    }
+
+    @Test
+    void getWinnerReturnsNullWhenGameNotOver() {
+        assertNull(firstPit.getWinner(), "Winner should be null while game is ongoing");
+    }
+
+    @Test
+    void getWinnerReturnsCorrectWinnerWhenGameIsOver() {
+        playShortestGame();
+
+        assertEquals(playerOne, firstPit.getWinner(), "Player one wins shortest game");
+    }
+
+    @Test
+    void getWinnerReturnsNullOnTie() {
+        playerOne.getMancala().setSeeds(24);
+        opponent.getMancala().setSeeds(24);
+
+        for (int holeNumber = 1; holeNumber < 15; holeNumber++) {
+            firstPit.getHoleAt(holeNumber).setSeeds(0);
+        }
+
+        assertNull(firstPit.getWinner(), "Winner is null in a tie");
     }
 }

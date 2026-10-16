@@ -36,6 +36,10 @@ public abstract class Hole {
         return owner;
     }
 
+    public Player getOpponent() {
+        return owner.getOpponent();
+    }
+
     public int getHoleNumber() {
         return holeNumber;
     }

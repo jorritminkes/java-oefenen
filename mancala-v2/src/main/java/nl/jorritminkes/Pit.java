@@ -1,5 +1,7 @@
 package nl.jorritminkes;
 
+import java.util.Optional;
+
 public class Pit extends Hole {
 
     public Pit() {
@@ -53,6 +55,7 @@ public class Pit extends Hole {
         }
 
         emptyRowsWhenGameOver();
+
     }
 
     private void emptyPit() {
@@ -84,6 +87,26 @@ public class Pit extends Hole {
         getNextHole().sweepSeeds(total);
     }
 
+    public Optional<Player> getWinner() {
+        if (!isGameOver()) {
+            throw new IllegalStateException("Game is not over yet");
+        }
+
+        int p1Score = getOwner().getMancala().getSeeds();
+        int p2Score = getOpponent().getMancala().getSeeds();
+
+        if (p1Score > p2Score) {
+            return Optional.of(getOwner());
+        } else if (p2Score > p1Score) {
+            return Optional.of(getOpponent());
+        }
+        return Optional.empty();
+    }
+
+    boolean isGameOver() {
+        return seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOpponent()) == 0;
+    }
+
     void emptyRowsWhenGameOver() {
         if (isGameOver()) {
             Hole firstPitPlayerOne = getFirstHole();
@@ -92,10 +115,6 @@ public class Pit extends Hole {
             firstPitPlayerOne.sweepSeeds(0);
             firstPitPlayerTwo.sweepSeeds(0);
         }
-    }
-
-    boolean isGameOver() {
-        return seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOwner().getOpponent()) == 0;
     }
 
     int seedsForPlayer(Player player) {
