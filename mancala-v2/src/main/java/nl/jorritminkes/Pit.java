@@ -33,8 +33,7 @@ public class Pit extends Hole {
     Pit getNeighborPit() {
         int neighborHoleNumber = TOTAL_HOLES - getHoleNumber();
 
-        Pit neighbor = (Pit) getFirstHole().getHoleAt(neighborHoleNumber);
-        return neighbor;
+        return (Pit) getFirstHole().getHoleAt(neighborHoleNumber);
     }
 
     public void move() {
@@ -96,11 +95,7 @@ public class Pit extends Hole {
     }
 
     boolean isGameOver() {
-        if (seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOwner().getOpponent()) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return seedsForPlayer(getOwner()) == 0 || seedsForPlayer(getOwner().getOpponent()) == 0;
     }
 
     int seedsForPlayer(Player player) {
