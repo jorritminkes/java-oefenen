@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PitTest {
@@ -258,9 +260,8 @@ class PitTest {
 
     @Test
     void getHoleAtInvalidIndexThrowsException() {
-        assertThrows(IllegalStateException.class, () -> {
-            firstPit.getHoleAt(0);
-        }, "Fetching a hole with index 0 or lower should throw an exception");
+        assertThrows(IllegalArgumentException.class, () -> firstPit.getHoleAt(0),
+                "Fetching a hole with index 0 or lower should throw an exception");
     }
 
     @Test
@@ -280,27 +281,27 @@ class PitTest {
     }
 
     @Test
-    void getWinnerReturnsNullWhenGameNotOver() {
-        assertNull(firstPit.getWinner(), "Winner should be null while game is ongoing");
+    void getWinnerThrowsWhenGameNotOver() {
+        assertThrows(IllegalStateException.class, () -> firstPit.getWinner(),
+                "Asking for a winner while the game is ongoing is a state error");
     }
 
     @Test
     void getWinnerReturnsCorrectWinnerWhenGameIsOver() {
         playShortestGame();
 
-        assertEquals(playerOne, firstPit.getWinner(), "Player one wins shortest game");
+        assertEquals(Optional.of(playerOne), firstPit.getWinner(), "Player one wins shortest game");
     }
 
     @Test
-    void getWinnerReturnsNullOnTie() {
+    void getWinnerReturnsEmptyOnTie() {
+        for (int holeNumber = 1; holeNumber <= 14; holeNumber++) {
+            firstPit.getHoleAt(holeNumber).setSeeds(0);
+        }
         playerOne.getMancala().setSeeds(24);
         opponent.getMancala().setSeeds(24);
 
-        for (int holeNumber = 1; holeNumber < 15; holeNumber++) {
-            firstPit.getHoleAt(holeNumber).setSeeds(0);
-        }
-
-        assertNull(firstPit.getWinner(), "Winner is null in a tie");
+        assertTrue(firstPit.getWinner().isEmpty(), "Winner is empty in a tie");
     }
 
     @Test
@@ -309,5 +310,22 @@ class PitTest {
         Hole hole3 = hole2.getNextHole();
 
         assertEquals(hole3, hole2.getHoleAt(3));
+    }
+
+    @Test
+    void getHoleAtNegativeThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> firstPit.getHoleAt(-1));
+    }
+
+    @Test
+    void landOnEmptyPitOfOpponentDoesNotCapture() {
+        Pit pit6 = (Pit) firstPit.getHoleAt(6);
+        pit6.setSeeds(3);
+        firstPit.getHoleAt(9).setSeeds(0);
+
+        pit6.move();
+
+        assertEquals(1, playerOne.getMancala().getSeeds());
+        assertEquals(1, firstPit.getHoleAt(9).getSeeds());
     }
 }
