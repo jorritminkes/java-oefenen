@@ -5,8 +5,9 @@ import java.util.Objects;
 public class Board {
     private final Cell[][] cells = new Cell[10][10];
     private final String originalString;
-    private final int BOARD_SIZE = 100;
-    private final int SIZE = 10;
+    private final static int BOARD_SIZE = 100;
+    private final static int SIZE = 10;
+    private final static int MAX_INDEX = SIZE - 1;
 
     public Board(String input) {
         if (input.length() != BOARD_SIZE) {
@@ -82,7 +83,7 @@ public class Board {
         int x = cell.getX();
         int y = cell.getY();
 
-        if (x < 1 || x > 8) {
+        if (x < 1 || x > MAX_INDEX - 1) {
             return;
         }
 
@@ -98,7 +99,7 @@ public class Board {
         int x = cell.getX();
         int y = cell.getY();
 
-        if (y < 1 || y > 8) {
+        if (y < 1 || y > MAX_INDEX - 1) {
             return;
         }
 
@@ -146,7 +147,7 @@ public class Board {
         int x = cell.getX();
         int y = cell.getY();
 
-        if (x > 7) {
+        if (x > MAX_INDEX - 2) {
             return;
         }
 
@@ -162,7 +163,7 @@ public class Board {
         int x = cell.getX();
         int y = cell.getY();
 
-        if (y > 7) {
+        if (y > MAX_INDEX - 2) {
             return;
         }
 
@@ -179,7 +180,7 @@ public class Board {
         int numberOfOnes = 0;
         int numberOfZeros = 0;
 
-        for (int y = 0; y < 10; y++) {
+        for (int y = 0; y < SIZE; y++) {
             Integer value = valueAt(column, y);
             if (value == null) {
                 continue;
@@ -191,9 +192,9 @@ public class Board {
             }
         }
 
-        if (numberOfOnes == 5) {
+        if (numberOfOnes == (SIZE / 2)) {
             cell.setValue(0);
-        } else if (numberOfZeros == 5) {
+        } else if (numberOfZeros == (SIZE / 2)) {
             cell.setValue(1);
         }
     }
@@ -203,7 +204,7 @@ public class Board {
         int numberOfOnes = 0;
         int numberOfZeros = 0;
 
-        for (int x = 0; x < 10; x++) {
+        for (int x = 0; x < SIZE; x++) {
             Integer value = valueAt(x, row);
             if (value == null) {
                 continue;
@@ -214,9 +215,9 @@ public class Board {
                 numberOfOnes++;
             }
         }
-        if (numberOfOnes == 5) {
+        if (numberOfOnes == (SIZE / 2)) {
             cell.setValue(0);
-        } else if (numberOfZeros == 5) {
+        } else if (numberOfZeros == (SIZE / 2)) {
             cell.setValue(1);
         }
     }

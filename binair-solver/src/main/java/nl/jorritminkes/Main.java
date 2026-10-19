@@ -6,6 +6,5 @@ public class Main {
         board.solve();
         System.out.println(board.boardAsString());
         board.printBoard();
-//        System.out.println(board.originalString());
     }
 }
