@@ -60,11 +60,17 @@ public class Board {
 
     private void solveCell(Cell cell) {
         horizontalSqueezeSolve(cell);
+        if (cell.getValue() != null) return;
         verticalSqueezeSolve(cell);
+        if (cell.getValue() != null) return;
         leftSolve(cell);
+        if (cell.getValue() != null) return;
         upSolve(cell);
+        if (cell.getValue() != null) return;
         rightSolve(cell);
+        if (cell.getValue() != null) return;
         downSolve(cell);
+        if (cell.getValue() != null) return;
     }
 
     private void horizontalSqueezeSolve(Cell cell) {
