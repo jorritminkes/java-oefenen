@@ -22,4 +22,8 @@ public class Cell {
     public int getValue() {
         return value;
     }
+
+    void setValue(Integer value) {
+        this.value = value;
+    }
 }
