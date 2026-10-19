@@ -19,7 +19,7 @@ public class Cell {
         return y;
     }
 
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
