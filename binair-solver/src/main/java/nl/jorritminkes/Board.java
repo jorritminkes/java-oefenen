@@ -5,19 +5,21 @@ import java.util.Objects;
 public class Board {
     private final Cell[][] cells = new Cell[10][10];
     private final String originalString;
+    private final int BOARD_SIZE = 100;
+    private final int SIZE = 10;
 
     public Board(String input) {
-        if (input.length() != 100) {
+        if (input.length() != BOARD_SIZE) {
             throw new IllegalArgumentException("Input must be 100 characters");
         }
 
         this.originalString = input;
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < BOARD_SIZE; i++) {
             char c = input.charAt(i);
 
-            int x = i % 10;
-            int y = i / 10;
+            int x = i % SIZE;
+            int y = i / SIZE;
 
             if (c == '.') {
                 cells[x][y] = new Cell(x, y, null);
@@ -41,9 +43,9 @@ public class Board {
         do {
             progress = false;
 
-            for (int i = 0; i < 100; i++) {
-                int x = i % 10;
-                int y = i / 10;
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                int x = i % SIZE;
+                int y = i / SIZE;
 
                 Cell cell = cells[x][y];
 
@@ -71,6 +73,9 @@ public class Board {
         if (cell.getValue() != null) return;
         downSolve(cell);
         if (cell.getValue() != null) return;
+        columnCounter(cell);
+        if (cell.getValue() != null) return;
+        rowCounter(cell);
     }
 
     private void horizontalSqueezeSolve(Cell cell) {
@@ -169,11 +174,58 @@ public class Board {
         }
     }
 
-    public boolean hasEmptyCells() {
-        for (int i = 0; i < 100; i++) {
-            int x = i % 10;
-            int y = i / 10;
-            if (cells[x][y] == null || cells[x][y].getValue() == null) {
+    private void columnCounter(Cell cell) {
+        int column = cell.getX();
+        int numberOfOnes = 0;
+        int numberOfZeros = 0;
+
+        for (int y = 0; y < 10; y++) {
+            Integer value = valueAt(column, y);
+            if (value == null) {
+                continue;
+            }
+            if (value == 0) {
+                numberOfZeros++;
+            } else {
+                numberOfOnes++;
+            }
+        }
+
+        if (numberOfOnes == 5) {
+            cell.setValue(0);
+        } else if (numberOfZeros == 5) {
+            cell.setValue(1);
+        }
+    }
+
+    private void rowCounter(Cell cell) {
+        int row = cell.getY();
+        int numberOfOnes = 0;
+        int numberOfZeros = 0;
+
+        for (int x = 0; x < 10; x++) {
+            Integer value = valueAt(x, row);
+            if (value == null) {
+                continue;
+            }
+            if (value == 0) {
+                numberOfZeros++;
+            } else {
+                numberOfOnes++;
+            }
+        }
+        if (numberOfOnes == 5) {
+            cell.setValue(0);
+        } else if (numberOfZeros == 5) {
+            cell.setValue(1);
+        }
+    }
+
+    private boolean hasEmptyCells() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int x = i % SIZE;
+            int y = i / SIZE;
+            if (cells[x][y].getValue() == null) {
                 return true;
             }
         }
@@ -187,9 +239,9 @@ public class Board {
     public String boardAsString() {
         StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < 100; i++) {
-            int x = i % 10;
-            int y = i / 10;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            int x = i % SIZE;
+            int y = i / SIZE;
             Integer value = cells[x][y].getValue();
             result.append(value == null ? "." : value.toString());
         }
@@ -199,8 +251,8 @@ public class Board {
     public void printBoard() {
         StringBuilder result = new StringBuilder();
 
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
+        for (int y = 0; y < SIZE; y++) {
+            for (int x = 0; x < SIZE; x++) {
                 Integer value = valueAt(x, y);
                 result.append(value == null ? "." : value.toString()).append(' ');
             }
