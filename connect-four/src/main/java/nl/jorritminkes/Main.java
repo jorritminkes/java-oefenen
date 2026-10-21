@@ -22,5 +22,9 @@ public class Main {
             int col = scanner.nextInt();
             board.makeMove(col);
         }
+
+        System.out.println("Lekker gewerkt pik. press enter to close");
+        scanner.nextLine();
+        scanner.nextLine();
     }
 }
