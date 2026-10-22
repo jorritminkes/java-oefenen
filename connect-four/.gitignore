@@ -36,6 +36,7 @@ build/
 .vscode/
 
 ### Mac OS ###
-.DS_Storerelease/
+.DS_Store
+release/
 dist/
 target/

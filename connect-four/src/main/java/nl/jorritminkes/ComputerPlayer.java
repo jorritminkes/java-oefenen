@@ -30,7 +30,6 @@ public class ComputerPlayer implements Player {
         if (board.isGameOver()) {
             return board.hasWinner() ? -(10_000 + depth) : 0;
         }
-        // Changed: at the depth limit it now uses evaluate() instead of returning 0
         if (depth == 0) return evaluate(board);
 
         int best = -INF;
@@ -45,8 +44,6 @@ public class ComputerPlayer implements Player {
         return best;
     }
 
-    // Added: scores a position for the player to move. It likes the center column
-    // and rows of 4 cells that contain 2 or 3 of its own pieces and none of the opponent's.
     private int evaluate(Board board) {
         int me = board.getPlayerToMove();
         int score = 0;
