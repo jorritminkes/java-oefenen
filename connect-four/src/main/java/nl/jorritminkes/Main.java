@@ -15,7 +15,10 @@ public class Main {
         int mode = askMode(scanner);
         Player[] players = createPlayers(mode, scanner);
 
-        board.printBoard();
+        if (mode == 1) {
+            board.printBoard();
+        }
+        
         while (!board.isGameOver()) {
             System.out.println("Player " + (board.getPlayerToMove() == 1 ? "1 (X)" : "2 (O)") + " to move");
             Player player = players[board.getPlayerToMove() - 1];
