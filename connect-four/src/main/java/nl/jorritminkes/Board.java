@@ -7,36 +7,62 @@ public class Board {
     private static final int PLAYER_2 = 2;
     private int playerToMove = PLAYER_1;
     private boolean isGameOver = false;
+    private boolean winnerFound = false;
 
     public Board() {
         board = new int[7][6];
-        printBoard();
+    }
+
+    private Board(Board other) {
+        board = new int[other.board.length][];
+        for (int col = 0; col < other.board.length; col++) {
+            board[col] = other.board[col].clone();
+        }
+        playerToMove = other.playerToMove;
+        isGameOver = other.isGameOver;
+        winnerFound = other.winnerFound;
+    }
+
+    public Board copy() {
+        return new Board(this);
+    }
+
+    public boolean canPlay(int col) {
+        return col >= 0 && col < board.length && board[col][0] == EMPTY;
+    }
+
+    public int getPlayerToMove() {
+        return playerToMove;
+    }
+
+    public boolean hasWinner() {
+        return winnerFound;
+    }
+
+    public int getCell(int col, int row) {
+        return board[col][row];
     }
 
     public boolean makeMove(int col) {
         if (isGameOver) {
-            System.out.println("The game is already over");
             return false;
         }
 
         if (col < 0 || col >= board.length) {
-            System.out.println("Column out of bounds. Try agian");
             return false;
         }
 
         for (int row = board[col].length - 1; row >= 0; row--) {
             if (board[col][row] == EMPTY) {
                 board[col][row] = playerToMove;
-                printBoard();
 
                 if (hasWon(playerToMove)) {
-                    System.out.println("Player " + (playerToMove == PLAYER_1 ? "1 (X)" : "2 (O)") + " wins!");
                     isGameOver = true;
+                    winnerFound = true;
                     return true;
                 }
 
                 if (isBoardFull()) {
-                    System.out.println("It is a draw");
                     isGameOver = true;
                     return true;
                 }
@@ -45,8 +71,6 @@ public class Board {
                 return true;
             }
         }
-
-        System.out.println("Column is full! Choose a different column");
         return false;
     }
 
