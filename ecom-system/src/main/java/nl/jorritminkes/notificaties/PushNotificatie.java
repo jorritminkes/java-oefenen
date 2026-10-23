@@ -1,4 +1,6 @@
-package nl.jorritminkes;
+package nl.jorritminkes.notificaties;
+
+import nl.jorritminkes.Bestelling;
 
 public class PushNotificatie extends Notificatie {
 
@@ -7,7 +9,7 @@ public class PushNotificatie extends Notificatie {
     }
 
     @Override
-    void verstuur(Bestelling bestelling) {
+    public void verstuur(Bestelling bestelling) {
         String bericht = getBericht();
 
         System.out.println("[PUSH] App notificatie: " + bericht);

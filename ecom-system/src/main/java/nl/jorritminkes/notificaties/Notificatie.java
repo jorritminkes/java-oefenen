@@ -1,4 +1,6 @@
-package nl.jorritminkes;
+package nl.jorritminkes.notificaties;
+
+import nl.jorritminkes.Bestelling;
 
 public abstract class Notificatie {
     private String bericht;
@@ -7,9 +9,9 @@ public abstract class Notificatie {
         this.bericht = bericht;
     }
 
-    String getBericht() {
+    public String getBericht() {
         return bericht;
     }
 
-    abstract void verstuur(Bestelling bestelling);
+    public abstract void verstuur(Bestelling bestelling);
 }

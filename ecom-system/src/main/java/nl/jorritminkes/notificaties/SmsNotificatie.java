@@ -1,4 +1,6 @@
-package nl.jorritminkes;
+package nl.jorritminkes.notificaties;
+
+import nl.jorritminkes.Bestelling;
 
 public class SmsNotificatie extends Notificatie {
 
@@ -7,7 +9,7 @@ public class SmsNotificatie extends Notificatie {
     }
 
     @Override
-    void verstuur(Bestelling bestelling) {
+    public void verstuur(Bestelling bestelling) {
         String klantTelefoonnummer = bestelling.getKlantTelefoonnummer();
         String bericht = getBericht();
 
